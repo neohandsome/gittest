@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game</title>
+    <style>
+        .container {
+            text-align: center;
+        }
+        .health {
+            font-size: 24px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Game</h1>
+        <div class="health">
+            User Health: <span id="userHealth">100</span>
+            Computer Health: <span id="computerHealth">100</span>
+            User EXP: <span id="userExp">0</span>
+        </div>
+        <p id="question">Question goes here...</p>
+        <input type="text" id="answer" placeholder="Your Answer">
+        <button onclick="checkAnswer()">Submit Answer</button>
+    </div>
+
+    <script>
+        let userHealth = 100;
+        let computerHealth = 100;
+        const userHealthDisplay = document.getElementById('userHealth');
+        const computerHealthDisplay = document.getElementById('computerHealth');
+        const userExpDisplay = document.getElementById('userExp');
+        const questionDisplay = document.getElementById('question');
+        const answerInput = document.getElementById('answer');
+
+        const questions = [
+            {
+                question: "What is 2 + 2?",
+                answer: "4"
+            },
+            {
+                question: "What is the capital of France?",
+                answer: "Paris"
+            },
+            // Add more questions here
+        ];
+
+        let currentQuestionIndex = 0;
+
+        function updateHealth() {
+            userHealthDisplay.textContent = userHealth;
+            computerHealthDisplay.textContent = computerHealth;
+        }
+
+        function askQuestion() {
+            questionDisplay.textContent = questions[currentQuestionIndex].question;
+        }
+
+        function checkAnswer() {
+            const userAnswer = answerInput.value.toLowerCase();
+            const correctAnswer = questions[currentQuestionIndex].answer.toLowerCase();
+
+            if (userAnswer === correctAnswer) {
+                // User answered correctly, computer takes damage
+                computerHealth -= 10;
+                if (computerHealth < 0) {
+                    computerHealth = 0;
+                }
+
+                userExp += 10;
+                userExpDisplay.textContent = userExp;
+            } else {
+                // User answered incorrectly, user takes damage
+                userHealth -= 10;
+                if (userHealth < 0) {
+                    userHealth = 0;
+                }
+            }
+
+            updateHealth();
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                askQuestion();
+            } else {
+                // Game over, determine the winner
+                if (userHealth === 0) {
+                    questionDisplay.textContent = "Game over! Computer wins!";
+                } else if (computerHealth === 0) {
+                    questionDisplay.textContent = "Game over! You win!";
+                } else {
+                    questionDisplay.textContent = "Game over! It's a draw!";
+                }
+                answerInput.disabled = true;
+            }
+
+            // Clear the answer input
+            answerInput.value = "";
+        }
+
+        // Start the game
+        askQuestion();
+    </script>
+
+    //COMMENT TEST
+
+</body>
+</html>
